@@ -169,7 +169,7 @@ public class OverviewPageViewModel : PageViewModelBase
     {
         return Dispatcher.UIThread.InvokeAsync(async () =>
         {
-            await _storageService.SetAsync<IUser?>(StorageConstants.User, null);
+            await _storageService.RemoveAsync(StorageConstants.User);
             _mainViewModel.Router.Navigate.Execute(new LoginPageViewModel(_mainViewModel, _onClosed));
         });
     }

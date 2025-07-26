@@ -113,7 +113,7 @@ public class SplashScreenViewModel : WindowViewModelBase
         if (claims?.Value == user.Name)
             return true;
 
-        await _storageService.SetAsync<IUser?>(StorageConstants.User, null).ConfigureAwait(false);
+        await _storageService.RemoveAsync(StorageConstants.User).ConfigureAwait(false);
 
         return false;
     }
@@ -126,7 +126,7 @@ public class SplashScreenViewModel : WindowViewModelBase
         if (userData.User.IsAuth)
             return userData.User.IsAuth;
 
-        await _storageService.SetAsync<IUser?>(StorageConstants.User, null).ConfigureAwait(false);
+        await _storageService.RemoveAsync(StorageConstants.User).ConfigureAwait(false);
 
         return userData.User.IsAuth;
     }

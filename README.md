@@ -39,6 +39,12 @@ Before installing the GamerVII Launcher, ensure you have the following prerequis
    dotnet run --project path/to/your/project
    ```
 
+   The launcher uses Sentry for error reporting. Set the `SENTRY_DSN` environment
+   variable with your DSN before running if you want to enable reporting:
+   ```bash
+   export SENTRY_DSN="https://public@example.com/1"
+   ```
+
 ### Troubleshooting
 
 If you encounter any issues during the installation, ensure the following:

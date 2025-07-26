@@ -57,6 +57,11 @@ public class LocalStorageService : IStorageService
         return default;
     }
 
+    public Task RemoveAsync(string key)
+    {
+        return _database.DeleteAsync<StorageItem>(key);
+    }
+
     public Task<int> SaveRecord<T>(T record)
     {
         return _database.InsertOrReplaceAsync(record);

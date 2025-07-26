@@ -30,6 +30,13 @@ public interface IStorageService
     Task<T?> GetAsync<T>(string key);
 
     /// <summary>
+    ///     Removes a value associated with the specified key.
+    /// </summary>
+    /// <param name="key">Key of value to remove.</param>
+    /// <returns>A task representing the asynchronous operation.</returns>
+    Task RemoveAsync(string key);
+
+    /// <summary>
     ///     Saves a record of type T to the storage service.
     /// </summary>
     /// <typeparam name="T">The type of the record to save.</typeparam>

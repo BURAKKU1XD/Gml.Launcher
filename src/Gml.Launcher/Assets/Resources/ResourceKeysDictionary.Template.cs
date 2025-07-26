@@ -1,5 +1,7 @@
 ﻿namespace Gml.Launcher.Assets;
 
+using System;
+
 public static class ResourceKeysDictionary
 {
     public const string MainPageTitle = "DefaultPageTitle";
@@ -30,6 +32,12 @@ public static class ResourceKeysDictionary
     public const string FailedOs = "FailedOs";
     public const string JavaNotFound = "JavaNotFound";
     public const string IsDiskFull = "IsDiskFull";
-    public const string Host = "{{HOST}}";
+    public static string Host
+    {
+        get
+        {
+            return Environment.GetEnvironmentVariable("GML_HOST") ?? "{{HOST}}";
+        }
+    }
     public const string FolderName = "{{FOLDER_NAME}}";
 }

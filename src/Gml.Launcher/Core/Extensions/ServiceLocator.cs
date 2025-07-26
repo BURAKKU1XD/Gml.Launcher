@@ -77,7 +77,8 @@ public static class ServiceLocator
     private static GmlClientManager RegisterGmlManager(SystemService systemService, string installationDirectory,
         string[] arguments)
     {
-        var manager = new GmlClientManager(installationDirectory, ResourceKeysDictionary.Host,
+        var host = ResourceKeysDictionary.Host;
+        var manager = new GmlClientManager(installationDirectory, host,
             ResourceKeysDictionary.FolderName,
             systemService.GetOsType());
 #if DEBUG

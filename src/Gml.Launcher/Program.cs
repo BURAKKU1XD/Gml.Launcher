@@ -83,8 +83,9 @@ internal class Program
     {
         Debug.WriteLine($"[Gml][{DateTime.Now:yyyy-MM-dd HH:mm:ss.fff}] Start sentry initialization");
         var sentryUrl = Environment.GetEnvironmentVariable("SENTRY_DSN");
+        var host = ResourceKeysDictionary.Host;
         if (string.IsNullOrWhiteSpace(sentryUrl))
-            sentryUrl = GmlClientManager.GetSentryLink(ResourceKeysDictionary.Host).Result;
+            sentryUrl = GmlClientManager.GetSentryLink(host).Result;
 
         try
         {

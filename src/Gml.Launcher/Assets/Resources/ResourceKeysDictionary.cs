@@ -1,5 +1,7 @@
 ﻿namespace Gml.Launcher.Assets;
 
+using System;
+
 public static class ResourceKeysDictionary
 {
     public const string MainPageTitle = "DefaultPageTitle";
@@ -31,6 +33,20 @@ public static class ResourceKeysDictionary
     public const string JavaNotFound = "JavaNotFound";
     public const string IsDiskFull = "IsDiskFull";
     // public const string Host = "https://gmlb.recloud.tech";
-    public const string Host = "http://10.0.10.74:5000";
+#if DEBUG
+    private const string DevelopmentHost = "http://10.0.10.74:5000";
+#endif
+    public static string Host
+    {
+        get
+        {
+            var host = Environment.GetEnvironmentVariable("GML_HOST");
+#if DEBUG
+            if (string.IsNullOrWhiteSpace(host))
+                host = DevelopmentHost;
+#endif
+            return host ?? string.Empty;
+        }
+    }
     public const string FolderName = "GamerVIILacunerhV2";
 }

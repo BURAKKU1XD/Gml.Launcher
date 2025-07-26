@@ -26,14 +26,19 @@ Before installing the GamerVII Launcher, ensure you have the following prerequis
    cd minecraft-launcher
    ```
 
-2. **Build the Project:**
+2. **Initialize Submodules:**
+   Ensure all Git submodules are initialized and updated before building:
+   ```bash
+   git submodule update --init --recursive
+   ```
+3. **Build the Project:**
    Restore the dependencies and build the project using the .NET CLI:
    ```bash
    dotnet restore
    dotnet build
    ```
 
-3. **Run the Launcher:**
+4. **Run the Launcher:**
    Once the project is built, you can run the launcher using the following command:
    ```bash
    dotnet run --project path/to/your/project

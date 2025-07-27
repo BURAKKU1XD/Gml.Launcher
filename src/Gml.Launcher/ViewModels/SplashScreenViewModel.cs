@@ -3,9 +3,11 @@ using System.Diagnostics;
 using System.IdentityModel.Tokens.Jwt;
 using System.IO;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
+using Microsoft.IdentityModel.Tokens;
 using Gml.Client;
 using Gml.Client.Models;
 using Gml.Launcher.Assets;
@@ -106,12 +108,58 @@ public class SplashScreenViewModel : WindowViewModelBase
         if (!handler.CanReadToken(user.AccessToken))
             return false;
 
-        var jwtToken = handler.ReadJwtToken(user.AccessToken);
+        var keyString = Environment.GetEnvironmentVariable("GML_JWT_KEY");
 
-        var claims = jwtToken.Claims.FirstOrDefault(c => c.Type == "name");
+        if (string.IsNullOrWhiteSpace(keyString))
+        {
+            await _storageService.RemoveAsync(StorageConstants.User).ConfigureAwait(false);
+            return false;
+        }
 
-        if (claims?.Value == user.Name)
-            return true;
+        SecurityKey signingKey;
+        if (keyString.Contains("BEGIN"))
+        {
+            try
+            {
+                var rsa = RSA.Create();
+                rsa.ImportFromPem(keyString.ToCharArray());
+                signingKey = new RsaSecurityKey(rsa);
+            }
+            catch (Exception)
+            {
+                await _storageService.RemoveAsync(StorageConstants.User).ConfigureAwait(false);
+                return false;
+            }
+        }
+        else
+        {
+            signingKey = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(keyString));
+        }
+
+        var validationParameters = new TokenValidationParameters
+        {
+            ValidateIssuerSigningKey = true,
+            IssuerSigningKey = signingKey,
+            ValidateIssuer = true,
+            ValidIssuer = ResourceKeysDictionary.Host,
+            ValidateAudience = true,
+            ValidAudience = ResourceKeysDictionary.Host,
+            ValidateLifetime = true,
+            ClockSkew = TimeSpan.Zero
+        };
+
+        try
+        {
+            var principal = handler.ValidateToken(user.AccessToken, validationParameters, out _);
+            var nameClaim = principal.Claims.FirstOrDefault(c => c.Type == "name")?.Value;
+
+            if (nameClaim == user.Name)
+                return true;
+        }
+        catch (Exception)
+        {
+            // ignored
+        }
 
         await _storageService.RemoveAsync(StorageConstants.User).ConfigureAwait(false);
 

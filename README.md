@@ -50,6 +50,12 @@ Before installing the GamerVII Launcher, ensure you have the following prerequis
    export SENTRY_DSN="https://public@example.com/1"
    ```
 
+   To validate authentication tokens, set the `GML_JWT_KEY` environment variable
+   with the server's public key or HMAC secret:
+   ```bash
+   export GML_JWT_KEY="<server-key>"
+   ```
+
 ### Troubleshooting
 
 If you encounter any issues during the installation, ensure the following:
